@@ -1,0 +1,90 @@
+<div class="calculator-container" style="width: 100%; max-width: 600px; margin: auto; text-align: center; font-family: Arial, sans-serif;">
+    <h1>Калькулятор расчёта стоимости фасада</h1>
+    <div class="form-group">
+        <label for="decor">Выберите производителя декоративной штукатурки*</label>
+        <select id="decor">
+            <option value="Caparol">Caparol</option>
+            <option value="Ceresit">Ceresit</option>
+            <option value="БОЛАРС">БОЛАРС</option>
+            <option value="АЛАМИКС">АЛАМИКС</option>
+        </select>
+    </div> 
+    <div class="form-group">
+        <label for="insulation">Выберите утеплитель*</label>
+        <select id="insulation">
+            <option value="Пенополистерол">Пенополистерол</option>
+            <option value="Минераловатные плиты">Минераловатные плиты</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="thickness">Выберите толщину утеплителя*</label>
+        <select id="thickness">
+            <option value="50">50 мм</option>
+            <option value="80">80 мм</option>
+            <option value="100">100 мм</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="facadeArea">Введите площадь фасада*</label>
+        <input type="number" id="facadeArea" placeholder="0" min="0">
+    </div>
+    <div class="form-group">
+        <label for="windowArea">Введите площадь окон</label>
+        <input type="number" id="windowArea" placeholder="0" min="0">
+    </div>
+    <button onclick="calculateCost()">Рассчитать стоимость</button>
+    <div class="result" id="result" style="font-size: 20px; margin-top: 15px;">0 руб.</div>
+</div>
+
+<script>
+    function calculateCost() {
+        const decor = document.getElementById('decor').value;
+        const insulation = document.getElementById('insulation').value;
+        const thickness = parseInt(document.getElementById('thickness').value);
+        const facadeArea = parseFloat(document.getElementById('facadeArea').value);
+        const windowArea = parseFloat(document.getElementById('windowArea').value);
+
+        if (isNaN(facadeArea) || facadeArea <= 0) {
+            alert('Введите корректную площадь фасада.');
+            return;
+        }
+
+        const effectiveArea = facadeArea - (windowArea || 0);
+        if (effectiveArea <= 0) {
+            alert('Площадь окон не может быть больше или равна площади фасада.');
+            return;
+        }
+
+        let baseCost = 0;
+        
+        switch (decor) {
+            case 'Caparol':
+                baseCost += 500;
+                break;
+            case 'Ceresit':
+                baseCost += 450;
+                break;
+            case 'БОЛАРС':
+                baseCost += 400;
+                break;
+            case 'АЛАМИКС':
+                baseCost += 350;
+                break;
+        }
+
+        switch (insulation) {
+            case 'Пенополистерол':
+                baseCost += 300;
+                break;
+            case 'Минераловатные плиты':
+                baseCost += 400;
+                break;
+        }
+
+        baseCost += (thickness / 10);
+
+        const totalCost = baseCost * effectiveArea;
+
+        document.getElementById('result').innerText = `${totalCost.toFixed(2)} руб.`;
+    }
+</script>
